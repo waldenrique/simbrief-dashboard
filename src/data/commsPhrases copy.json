@@ -1,0 +1,190 @@
+    {
+      phase: "Autorização IFR",
+      pt: [
+        {
+          piloto: "TRÁFEGO Guarulhos, bom dia, {{callsign}}, na posição {{gate}}, solicita plano IFR para {{arrival}} no nível {{cruise}}, ciente da {{atis}}, pronto para cópia.",
+          atc: "{{callsign}}, autorizado IFR para {{arrival}} no nível {{cruise}}, decola da pista {{runway}}, transição via {{sid}}, código transponder {{transponder}}, coteje."
+        },
+        {
+          piloto: "Autorizado IFR para {{arrival}}, nível {{cruise}}, decola da {{runway}}, transição {{sid}}, código transponder {{transponder}}, {{callsign}}.",
+          atc: "{{callsign}}, cotejamento correto. Para pushback e acionamento, coordene com a UNICOM 122.800. Bom voo!"
+        }
+      ],
+      en: [
+        {
+          piloto: "Guarulhos Delivery, good morning, {{callsign}}, at stand {{gate}}, requesting IFR clearance to {{arrival}}, FL{{cruise}}, with {{atis}}, ready to copy.",
+          atc: "{{callsign}}, cleared to {{arrival}}, climb FL{{cruise}}, departure runway {{runway}}, via SID {{sid}}, squawk {{transponder}}. Read back."
+        },
+        {
+          piloto: "Cleared to {{arrival}}, FL{{cruise}}, via SID {{sid}}, runway {{runway}}, squawk {{transponder}}, {{callsign}}.",
+          atc: "{{callsign}}, readback correct. Contact UNICOM 122.800 for pushback and startup. Have a good flight!"
+        }
+      ]
+    },
+    {
+      phase: "Autorização para o Pushback",
+      pt: [
+        {
+          piloto: "{{callsign}}, pronto para pushback e acionamento.",
+          atc: "{{callsign}}, autorizado pushback e acionamento, reporte pronto para taxi."
+        }
+      ],
+      en: [
+        {
+          piloto: "{{callsign}}, ready for pushback and start-up.",
+          atc: "{{callsign}}, pushback and start-up approved. Report ready for taxi."
+        }
+      ]
+    },
+    {
+      phase: "Autorização para o Táxi Origem",
+      pt: [
+        {
+          piloto: "{{callsign}}, pronto para taxi.",
+          atc: "{{callsign}}, taxi via {{taxi_out}} até o ponto de espera da {{runway}}."
+        }
+      ],
+      en: [
+        {
+          piloto: "{{callsign}}, ready to taxi.",
+          atc: "{{callsign}}, taxi via {{taxi_out}} to holding point runway {{runway}}."
+        }
+      ]
+    },
+    {
+      phase: "Autorização para a Decolagem Origem",
+      pt: [
+        {
+          piloto: "{{callsign}}, pronto no ponto de espera da {{runway}}.",
+          atc: "{{callsign}}, autorizado decolagem pista {{runway}}, vento calmo, ajuste 1016."
+        }
+      ],
+      en: [
+        {
+          piloto: "{{callsign}}, ready at holding point runway {{runway}}.",
+          atc: "{{callsign}}, cleared for takeoff runway {{runway}}, wind calm, QNH 1016."
+        }
+      ]
+    },
+    {
+      phase: "Transferência para o Controle Origem",
+      pt: [
+        {
+          piloto: "{{callsign}}, decolado, subindo para FL190 via SID {{sid}}.",
+          atc: "{{callsign}}, radar contato, reporte ao atingir FL190."
+        },
+        {
+          piloto: "{{callsign}}, no nível de voo FL190.",
+          atc: "Autorizado subida para FL{{cruise}}, reporte no ideal de descida."
+        }
+      ],
+      en: [
+        {
+          piloto: "{{callsign}}, airborne, climbing to FL190 via SID {{sid}}.",
+          atc: "{{callsign}}, radar contact, report reaching FL190."
+        },
+        {
+          piloto: "{{callsign}}, level FL190.",
+          atc: "Climb and maintain FL{{cruise}}, report at top of descent."
+        }
+      ]
+    },
+    {
+      phase: "Transferência para o Centro",
+      pt: [
+        {
+          atc: "{{callsign}}, transfira para UNICOM na frequência 122.800.",
+          piloto: "Vai chamar UNICOM na 122.800, {{callsign}}."
+        }
+      ],
+      en: [
+        {
+          atc: "{{callsign}}, contact UNICOM on 122.800.",
+          piloto: "Switching to UNICOM 122.800, {{callsign}}."
+        }
+      ]
+    },
+    {
+      phase: "Transferência para o Controle Destino",
+      pt: [
+        {
+          piloto: "{{callsign}}, com o senhor, boa tarde.",
+          atc: "{{callsign}}, boa tarde, continue descida para FL060."
+        },
+        {
+          piloto: "{{callsign}}, descendo para FL060.",
+          atc: "Autorizado ILS pista 02, reporte estabilizado."
+        },
+        {
+          piloto: "Estabilizado no ILS pista 02, {{callsign}}."
+        }
+      ],
+      en: [
+        {
+          piloto: "{{callsign}}, with you, good afternoon.",
+          atc: "{{callsign}}, good afternoon, descend and maintain FL060."
+        },
+        {
+          piloto: "Descending to FL060, {{callsign}}.",
+          atc: "Cleared for ILS approach runway 02, report established."
+        },
+        {
+          piloto: "Established on ILS runway 02, {{callsign}}."
+        }
+      ]
+    },
+    {
+      phase: "Transferência para a Torre Destino",
+      pt: [
+        {
+          piloto: "{{callsign}}, na final da pista 02, trem baixado e travado.",
+          atc: "Autorizado pouso pista 02, ajuste 1008, reporte livrando."
+        },
+        {
+          piloto: "Pouso autorizado pista 02, ajuste 1008, {{callsign}}.",
+          atc: "Reporte livrando a pista."
+        },
+        {
+          piloto: "{{callsign}}, pista livre."
+        }
+      ],
+      en: [
+        {
+          piloto: "{{callsign}}, final runway 02, gear down and locked.",
+          atc: "Cleared to land runway 02, QNH 1008, report runway vacated."
+        },
+        {
+          piloto: "Cleared to land runway 02, QNH 1008, {{callsign}}.",
+          atc: "Report vacated."
+        },
+        {
+          piloto: "{{callsign}}, runway vacated."
+        }
+      ]
+    },
+    {
+      phase: "Transferência para o Solo Destino",
+      pt: [
+        {
+          atc: "{{callsign}}, taxi para posição {{gate}}, permaneça com torre até corte dos motores.",
+          piloto: "Taxiando para posição {{gate}}, manter com torre, {{callsign}}."
+        },
+        {
+          piloto: "{{callsign}}, motores cortados na posição {{gate}}.",
+          atc: "Coordene na UNICOM 122.800. Até a próxima!"
+        }
+      ],
+      en: [
+        {
+          atc: "{{callsign}}, taxi to stand {{gate}}, remain with tower until shutdown.",
+          piloto: "Taxiing to stand {{gate}}, staying with tower, {{callsign}}."
+        },
+        {
+          piloto: "{{callsign}}, shutdown complete at stand {{gate}}.",
+          atc: "Contact UNICOM 122.800. See you next time!"
+        }
+      ]
+    }
+  ];
+  
+  
