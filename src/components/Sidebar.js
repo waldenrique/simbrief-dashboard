@@ -40,6 +40,8 @@ const Sidebar = () => {
         <h1 className="text-2xl font-bold mb-6">Simbrief Dash</h1>
         <nav className="space-y-4">
           <li><Link to="/" className="hover:text-blue-400">Dashboard</Link></li>
+          <li><Link to="/voo-ao-vivo" className="hover:text-blue-400">Voo ao Vivo</Link></li>
+
         </nav>
       </div>
     </aside>

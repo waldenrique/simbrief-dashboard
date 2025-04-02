@@ -45,9 +45,10 @@ const CommsTable = ({ simbriefData }) => {
     atis: '',
     transponder: '',
     taxi_out: '',
+    icao_origen: '',
     icao_destino: '',
-    icao_origin: '',
     procesimento: '',
+    star: '',
     taxi_in: ''
   });
 
@@ -62,10 +63,10 @@ const CommsTable = ({ simbriefData }) => {
       runway_d: simbriefData.destination?.plan_rwy || prev.runway_d,
       runway: simbriefData.origin?.plan_rwy || prev.runway,
       sid: simbriefData.general?.sid_ident || prev.sid,
+      star: simbriefData.general?.star_ident || prev.star,
       taxi_out: simbriefData.origin?.taxi_out_time || prev.taxi_out,
-      taxi_out: simbriefData.origin?.taxi_out_time || prev.taxi_out,
-      icao_destino: simbriefData.destino?.icao_code || prev.icao_destino,
-      icao_origen: simbriefData.origin?.icao_code || prev.icao_origin,
+      icao_origen: simbriefData.destination?.icao_code || prev.icao_origen,
+      icao_destino: simbriefData.origin?.icao_code || prev.icao_destino,
       procesimento: simbriefData.destination?.approach_type || prev.procedimento,
       taxi_in: simbriefData.destination?.taxi_in_time || prev.taxi_in,
     }));
@@ -92,7 +93,7 @@ const CommsTable = ({ simbriefData }) => {
         <Card className="p-4 mb-4">
           <h3 className="text-lg font-semibold mb-2">📍 Origem</h3>
           <div className="grid grid-cols-2 gap-4">
-            {['callsign', 'ICAO','sid', 'runway', 'transponder', 'gate', 'taxi_out', 'atis'].map((key) => (
+            {['callsign', 'icao_origen','sid', 'runway', 'transponder', 'gate', 'taxi_out', 'atis'].map((key) => (
               <div key={key}>
                 <label className="block text-sm font-medium mb-1 capitalize" htmlFor={key}>
                   {key.replace('_', ' ')}:
@@ -114,7 +115,7 @@ const CommsTable = ({ simbriefData }) => {
 <Card className="p-4 mb-4">
   <h3 className="text-lg font-semibold mb-2">🎯 Destino</h3>
   <div className="grid grid-cols-2 gap-4">
-    {['callsign', 'icao', 'procedimento', 'runway_d', 'taxi_in', 'star', 'gate', 'obs'].map((key) => (
+    {['callsign', 'icao_destino', 'procedimento', 'runway_d', 'taxi_in', 'star', 'gate', 'obs'].map((key) => (
       <div key={key}>
         <label className="block text-sm font-medium mb-1 capitalize" htmlFor={key}>
           {key === 'icao' ? 'ICAO' : key.replace('_', ' ')}:

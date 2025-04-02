@@ -1,9 +1,9 @@
 [
   {
-    "phase": "Autorização IFR",
+    "phase": "Aprovação do Plano de Voo",
     "pt": [
       {
-        "piloto": "TRÁFEGO Guarulhos, bom dia, {{callsign}}, na posição {{gate}}, solicita plano IFR para {{arrival}} no nível {{cruise}}, ciente da {{atis}}, pronto para cópia.",
+        "piloto": "TRÁFEGO Guarulhos, bom dia, {{callsign}}, na posição {{gate}}, solicita plano de voo instrumentos para {{arrival}} no nível {{cruise}}, ciente da informação {{atis}}, pronto para cópia.",
         "atc": "{{callsign}}, autorizado IFR para {{arrival}} no nível {{cruise}}, decola da pista {{runway}}, transição via {{sid}}, código transponder {{transponder}}, coteje."
       },
       {
