@@ -3,21 +3,21 @@
     "phase": "Aprovação do Plano de Voo",
     "pt": [
       {
-        "piloto": "TRÁFEGO Guarulhos, bom dia, {{callsign}}, na posição {{gate}}, solicita plano de voo instrumentos para {{arrival}} no nível {{cruise}}, ciente da informação {{atis}}, pronto para cópia.",
-        "atc": "{{callsign}}, autorizado IFR para {{arrival}} no nível {{cruise}}, decola da pista {{runway}}, transição via {{sid}}, código transponder {{transponder}}, coteje."
+        "piloto": "{{origin_service}} {{origin_city}}, bom dia, {{callsign}}, na posição {{gate}}, solicita plano de voo instrumentos para {{destination_city}} no nível {{cruise}}, ciente da informação {{atis}}, pronto para cópia.",
+        "atc": "{{callsign}}, autorizado IFR para {{destination_city}} no nível {{cruise}}, decola da pista {{runway}}, transição via {{sid}}, código transponder {{transponder}}, coteje."
       },
       {
-        "piloto": "Autorizado IFR para {{arrival}}, nível {{cruise}}, decola da {{runway}}, transição {{sid}}, código transponder {{transponder}}, {{callsign}}.",
+        "piloto": "Autorizado IFR para {{destination_city}}, nível {{cruise}}, decola da {{runway}}, transição {{sid}}, código transponder {{transponder}}, {{callsign}}.",
         "atc": "{{callsign}}, cotejamento correto. Para pushback e acionamento, coordene com a UNICOM 122.800. Bom voo!"
       }
     ],
     "en": [
       {
-        "piloto": "Guarulhos Delivery, good morning, {{callsign}}, at stand {{gate}}, requesting IFR clearance to {{arrival}}, FL{{cruise}}, with {{atis}}, ready to copy.",
-        "atc": "{{callsign}}, cleared to {{arrival}}, climb FL{{cruise}}, departure runway {{runway}}, via SID {{sid}}, squawk {{transponder}}. Read back."
+        "piloto": "{{origin_service}} {{origin_city}} Delivery, good morning, {{callsign}}, at stand {{gate}}, requesting IFR clearance to {{destination_city}}, FL{{cruise}}, with {{atis}}, ready to copy.",
+        "atc": "{{callsign}}, cleared to {{destination_city}}, climb FL{{cruise}}, departure runway {{runway}}, via SID {{sid}}, squawk {{transponder}}. Read back."
       },
       {
-        "piloto": "Cleared to {{arrival}}, FL{{cruise}}, via SID {{sid}}, runway {{runway}}, squawk {{transponder}}, {{callsign}}.",
+        "piloto": "Cleared to {{destination_city}}, FL{{cruise}}, via SID {{sid}}, runway {{runway}}, squawk {{transponder}}, {{callsign}}.",
         "atc": "{{callsign}}, readback correct. Contact UNICOM 122.800 for pushback and startup. Have a good flight!"
       }
     ]
