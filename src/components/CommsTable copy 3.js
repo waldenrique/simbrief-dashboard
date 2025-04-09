@@ -197,10 +197,10 @@ const CommsTable = ({ simbriefData }) => {
         <Card className="p-4 mb-4">
           <h3 className="text-lg font-semibold mb-2">🎯 Destino</h3>
           <div className="grid grid-cols-2 gap-4">
-           {['callsign', 'icao_destino', 'procedimento', 'runway_d', 'taxi_in', 'star', 'gate_d','obs_d'].map((key) => (
+           {['callsign', 'icao_destino', 'procedimento', 'runway_d', 'taxi_in', 'star', 'gate_d'].map((key) => (
             <div key={key}>
               <label className="block text-sm font-medium mb-1 capitalize" htmlFor={key}>
-                 {key === 'obs_d' ? 'Observações' : key.replace('_', ' ')}:
+                {key.replace('_', ' ')}:
               </label>
               <input
                 type="text"

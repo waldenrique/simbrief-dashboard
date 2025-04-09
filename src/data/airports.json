@@ -1,0 +1,72 @@
+[
+  {
+    "icao": "SBGR",
+    "iata": "GRU",
+    "name": "Guarulhos International Airport",
+    "city": "São Paulo",
+    "country": "Brazil"
+  },
+  {
+    "icao": "SBSP",
+    "iata": "CGH",
+    "name": "Congonhas Airport",
+    "city": "São Paulo",
+    "country": "Brazil"
+  },
+  {
+    "icao": "SBKP",
+    "iata": "VCP",
+    "name": "Viracopos Airport",
+    "city": "Campinas",
+    "country": "Brazil"
+  },
+  {
+    "icao": "KJFK",
+    "iata": "JFK",
+    "name": "John F. Kennedy International Airport",
+    "city": "New York",
+    "country": "United States"
+  },
+  {
+    "icao": "KLAX",
+    "iata": "LAX",
+    "name": "Los Angeles International Airport",
+    "city": "Los Angeles",
+    "country": "United States"
+  },
+  {
+    "icao": "EGLL",
+    "iata": "LHR",
+    "name": "Heathrow Airport",
+    "city": "London",
+    "country": "United Kingdom"
+  },
+  {
+    "icao": "LFPG",
+    "iata": "CDG",
+    "name": "Charles de Gaulle Airport",
+    "city": "Paris",
+    "country": "France"
+  },
+  {
+    "icao": "ZBAA",
+    "iata": "PEK",
+    "name": "Beijing Capital International Airport",
+    "city": "Beijing",
+    "country": "China"
+  },
+  {
+    "icao": "RJTT",
+    "iata": "HND",
+    "name": "Tokyo Haneda Airport",
+    "city": "Tokyo",
+    "country": "Japan"
+  },
+  {
+    "icao": "YSSY",
+    "iata": "SYD",
+    "name": "Sydney Kingsford Smith Airport",
+    "city": "Sydney",
+    "country": "Australia"
+  }
+]

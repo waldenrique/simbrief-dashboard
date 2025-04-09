@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Card } from './ui/card';
 import phrasesData from '../data/commsPhrases.json';
 
-
-
 const CommsTable = ({ simbriefData }) => {
   const [language, setLanguage] = useState('pt');
   const [activeItem, setActiveItem] = useState(0); // abre só o primeiro por padrão
@@ -22,25 +20,26 @@ const CommsTable = ({ simbriefData }) => {
     icao_destino: '',
     procesimento: '',
     star: '',
-    taxi_in: ''
+    taxi_in: '',
+    originAtcServices: [],
+    destinationAtcServices: []
   });
 
-  // Preenche campos com dados do SimBrief
   useEffect(() => {
     if (!simbriefData || !simbriefData.general) return;
 
     setValues((prev) => ({
       ...prev,
       callsign: simbriefData.atc?.callsign || prev.callsign,
-      cruise: `FL${simbriefData.general?.initial_altitude || prev.cruise}`,
+      cruise: FL${simbriefData.general?.initial_altitude || prev.cruise},
       runway_d: simbriefData.destination?.plan_rwy || prev.runway_d,
       runway: simbriefData.origin?.plan_rwy || prev.runway,
       sid: simbriefData.general?.sid_ident || prev.sid,
       star: simbriefData.general?.star_ident || prev.star,
       taxi_out: simbriefData.origin?.taxi_out_time || prev.taxi_out,
-      icao_origen: simbriefData.destination?.icao_code || prev.icao_origen,
-      icao_destino: simbriefData.origin?.icao_code || prev.icao_destino,
-      procesimento: simbriefData.destination?.approach_type || prev.procedimento,
+      icao_origen: simbriefData.origin?.icao_code || prev.icao_origen,
+      icao_destino: simbriefData.destination?.icao_code || prev.icao_destino,
+      procesimento: simbriefData.destination?.approach_type || prev.procesimento,
       taxi_in: simbriefData.destination?.taxi_in_time || prev.taxi_in,
     }));
   }, [simbriefData]);
@@ -48,36 +47,114 @@ const CommsTable = ({ simbriefData }) => {
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
+
+  const handleServiceChange = (type, service, checked) => {
+    setValues((prev) => ({
+      ...prev,
+      [type]: checked
+        ? [...prev[type], service]
+        : prev[type].filter((s) => s !== service),
+    }));
+  };
+
   const replaceVars = (text) => {
     return text.replace(/\{\{(.*?)\}\}/g, (_, key) => {
-      if (key === 'atc') {
-        return values.atcOnline.length > 0 ? values.atcOnline.join(', ') : 'sem ATC online';
+      switch (key) {
+        case 'origin_city':
+          return simbriefData.origin?.city || 'Origem';
+        case 'destination_city':
+          return simbriefData.destination?.city || 'Destino';
+        case 'origin_service':
+          return values.originAtcServices?.[0] || 'Tráfego';
+        case 'destination_service':
+          return values.destinationAtcServices?.[0] || 'Tráfego';
+        case 'atis':
+          const atisLetter = values.atis?.toUpperCase();
+          const atisMap = {
+            A: 'Alpha', B: 'Bravo', C: 'Charlie', D: 'Delta', E: 'Echo', F: 'Foxtrot',
+            G: 'Golf', H: 'Hotel', I: 'India', J: 'Juliett', K: 'Kilo', L: 'Lima',
+            M: 'Mike', N: 'November', O: 'Oscar', P: 'Papa', Q: 'Quebec', R: 'Romeo',
+            S: 'Sierra', T: 'Tango', U: 'Uniform', V: 'Victor', W: 'Whiskey',
+            X: 'X-ray', Y: 'Yankee', Z: 'Zulu'
+          };
+          return atisMap[atisLetter] || values.atis || '____';
+        default:
+          return values[key] || '____';
       }
-      if (key === 'atis') {
-        const atisLetter = values.atis?.toUpperCase();
-        const atisMap = {
-          A: 'Alpha', B: 'Bravo', C: 'Charlie', D: 'Delta', E: 'Echo', F: 'Foxtrot',
-          G: 'Golf', H: 'Hotel', I: 'India', J: 'Juliett', K: 'Kilo', L: 'Lima',
-          M: 'Mike', N: 'November', O: 'Oscar', P: 'Papa', Q: 'Quebec', R: 'Romeo',
-          S: 'Sierra', T: 'Tango', U: 'Uniform', V: 'Victor', W: 'Whiskey',
-          X: 'X-ray', Y: 'Yankee', Z: 'Zulu'
-        };
-        return atisMap[atisLetter] || values.atis || '____';
-      }
-      return values[key] || '____';
     });
   };
-  
   
 
   return (
     <div className="mt-8 p-4">
+
+      {/* 🌐 Idioma das Frases */}
+      <Card className="w-full grid-cols-1 mt-6 mb-6 p-6 bg-white rounded shadow text-center">
+        <h3 className="text-lg font-semibold mb-2">🌐 Idioma das Frases</h3>
+        <p className="text-sm text-gray-600 mb-4">Escolha o idioma desejado para as comunicações:</p>
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => setLanguage('pt')}
+            className={px-6 py-2 rounded font-medium text-white transition ${
+              language === 'pt' ? 'bg-blue-700' : 'bg-gray-500'
+            }}
+          >
+            🇧🇷 Português
+          </button>
+          <button
+            onClick={() => setLanguage('en')}
+            className={px-6 py-2 rounded font-medium text-white transition ${
+              language === 'en' ? 'bg-blue-700' : 'bg-gray-500'
+            }}
+          >
+            🇬🇧 English
+          </button>
+        </div>
+      </Card>
+
+      {/* ✅ Serviços ATC Origem */}
+      <Card className="p-4 mb-4 w-full">
+        <h3 className="text-lg font-semibold mb-2">📍 Serviços ATC da Origem</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {['Delivery', 'Solo', 'Torre', 'Aproximação', 'Centro'].map((service) => (
+            <label key={service} className="flex items-center">
+              <input
+                type="checkbox"
+                value={service}
+                checked={values.originAtcServices.includes(service)}
+                onChange={(e) => handleServiceChange('originAtcServices', service, e.target.checked)}
+              />
+              <span className="ml-2">{service}</span>
+            </label>
+          ))}
+        </div>
+      </Card>
+
+      {/* ✅ Serviços ATC Destino */}
+      <Card className="p-4 mb-4 w-full">
+        <h3 className="text-lg font-semibold mb-2">🎯 Serviços ATC do Destino</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {['Delivery', 'Solo', 'Torre', 'Aproximação', 'Centro'].map((service) => (
+            <label key={service} className="flex items-center">
+              <input
+                type="checkbox"
+                value={service}
+                checked={values.destinationAtcServices.includes(service)}
+                onChange={(e) => handleServiceChange('destinationAtcServices', service, e.target.checked)}
+              />
+              <span className="ml-2">{service}</span>
+            </label>
+          ))}
+        </div>
+      </Card>
+
+      {/* Cards de Origem e Destino */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Origem */}
         <Card className="p-4 mb-4">
           <h3 className="text-lg font-semibold mb-2">📍 Origem</h3>
           <div className="grid grid-cols-2 gap-4">
-            {['callsign', 'icao_origen','sid', 'runway', 'transponder', 'gate', 'taxi_out', 'atis'].map((key) => (
+            {['callsign', 'icao_origen', 'sid', 'runway', 'transponder', 'gate', 'taxi_out', 'atis'].map((key) => (
               <div key={key}>
                 <label className="block text-sm font-medium mb-1 capitalize" htmlFor={key}>
                   {key.replace('_', ' ')}:
@@ -96,116 +173,39 @@ const CommsTable = ({ simbriefData }) => {
         </Card>
 
         {/* Destino */}
-<Card className="p-4 mb-4">
-  <h3 className="text-lg font-semibold mb-2">🎯 Destino</h3>
-  <div className="grid grid-cols-2 gap-4">
-    {['callsign', 'icao_destino', 'procedimento', 'runway_d', 'taxi_in', 'star', 'gate', 'obs'].map((key) => (
-      <div key={key}>
-        <label className="block text-sm font-medium mb-1 capitalize" htmlFor={key}>
-          {key === 'icao' ? 'ICAO' : key.replace('_', ' ')}:
-        </label>
-        <input
-          type="text"
-          id={key}
-          name={key}
-          value={values[key]}
-          onChange={handleChange}
-          className="w-full border px-2 py-1 rounded"
-          list={key === 'procedimento' ? 'procedure-options' : undefined}
-        />
-        {key === 'procedimento' && (
-          <datalist id="procedure-options">
-            <option value="ILS" />
-            <option value="RNAV" />
-            <option value="NDB" />
-            <option value="VOR" />
-            <option value="VISUAL" />
-          </datalist>
-        )}
+        <Card className="p-4 mb-4">
+          <h3 className="text-lg font-semibold mb-2">🎯 Destino</h3>
+          <div className="grid grid-cols-2 gap-4">
+            {['callsign', 'icao_destino', 'procedimento', 'runway_d', 'taxi_in', 'star', 'gate'].map((key) => (
+              <div key={key}>
+                <label className="block text-sm font-medium mb-1 capitalize" htmlFor={key}>
+                  {key.replace('_', ' ')}:
+                </label>
+                <input
+                  type="text"
+                  id={key}
+                  name={key}
+                  value={values[key]}
+                  onChange={handleChange}
+                  className="w-full border px-2 py-1 rounded"
+                  list={key === 'procedimento' ? 'procedure-options' : undefined}
+                />
+                {key === 'procedimento' && (
+                  <datalist id="procedure-options">
+                    <option value="ILS" />
+                    <option value="RNAV" />
+                    <option value="NDB" />
+                    <option value="VOR" />
+                    <option value="VISUAL" />
+                  </datalist>
+                )}
+              </div>
+            ))}
+          </div>
+        </Card>
       </div>
-    ))}
-  </div>
-</Card>
-{/* 📍 Serviços ATC Origem */}
-<Card className="p-4 mb-4 w-full">
-  <h3 className="text-lg font-semibold mb-2">📍 Serviços ATC da Origem</h3>
-  <div className="grid grid-cols-2 gap-2">
-    {['Delivery', 'Solo', 'Torre', 'Aproximação', 'Centro'].map(service => (
-      <label key={service} className="flex items-center">
-        <input
-          type="checkbox"
-          value={service}
-          checked={values.originAtcServices.includes(service)}
-          onChange={(e) => {
-            const checked = e.target.checked;
-            setValues((prev) => ({
-              ...prev,
-              originAtcServices: checked
-                ? [...prev.originAtcServices, service]
-                : prev.originAtcServices.filter(s => s !== service),
-            }));
-          }}
-        />
-        <span className="ml-2">{service}</span>
-      </label>
-    ))}
-  </div>
-</Card>
 
-{/* 🎯 Serviços ATC Destino */}
-<Card className="p-4 mb-4 w-full">
-  <h3 className="text-lg font-semibold mb-2">🎯 Serviços ATC do Destino</h3>
-  <div className="grid grid-cols-2 gap-2">
-    {['Delivery', 'Solo', 'Torre', 'Aproximação', 'Centro'].map(service => (
-      <label key={service} className="flex items-center">
-        <input
-          type="checkbox"
-          value={service}
-          checked={values.destinationAtcServices.includes(service)}
-          onChange={(e) => {
-            const checked = e.target.checked;
-            setValues((prev) => ({
-              ...prev,
-              destinationAtcServices: checked
-                ? [...prev.destinationAtcServices, service]
-                : prev.destinationAtcServices.filter(s => s !== service),
-            }));
-          }}
-        />
-        <span className="ml-2">{service}</span>
-      </label>
-    ))}
-  </div>
-</Card>
-
-
-
-        <Card className="w-full grid-cols-1 mt-6 mb-6 p-6 bg-white rounded shadow text-center">
-  <h3 className="text-lg font-semibold mb-2">🌐 Idioma das Frases</h3>
-  <p className="text-sm text-gray-600 mb-4">Escolha o idioma desejado para as comunicações:</p>
-  <div className="flex justify-center gap-4">
-    <button
-      onClick={() => setLanguage('pt')}
-      className={`px-6 py-2 rounded font-medium text-white transition ${
-        language === 'pt' ? 'bg-blue-700' : 'bg-gray-500'
-      }`}
-    >
-      🇧🇷 Português
-    </button>
-    <button
-      onClick={() => setLanguage('en')}
-      className={`px-6 py-2 rounded font-medium text-white transition ${
-        language === 'en' ? 'bg-blue-700' : 'bg-gray-500'
-      }`}
-    >
-      🇬🇧 English
-    </button>
-  </div>
-</Card>
-
-      </div>
-            
-      {/* Accordions com Tailwind */}
+      {/* Accordions das frases */}
       {phrasesData.map((section, idx) => (
         <div key={idx} className="mb-4 border border-gray-300 rounded overflow-hidden">
           <button
@@ -230,8 +230,11 @@ const CommsTable = ({ simbriefData }) => {
           )}
         </div>
       ))}
+
     </div>
   );
 };
 
 export default CommsTable;
+
+
