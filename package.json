@@ -45,7 +45,7 @@
       "last 1 safari version"
     ]
   },
-  "description": "<<<<<<< HEAD # Getting Started with Create React App",
+  "description": "Getting Started with Create React App",
   "main": "config-overrides.js",
   "repository": {
     "type": "git",
@@ -57,5 +57,5 @@
   "bugs": {
     "url": "https://github.com/waldenrique/simbrief-dashboard/issues"
   },
-  "homepage": ""
+  "homepage": "https://voo.waldenrique.com.br"
 }
