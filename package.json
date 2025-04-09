@@ -18,6 +18,7 @@
     "stream-browserify": "^3.0.0",
     "timers-browserify": "^2.0.12",
     "web-vitals": "^4.2.4",
+    "ws": "^8.18.1",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
@@ -43,5 +44,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "<<<<<<< HEAD # Getting Started with Create React App",
+  "main": "config-overrides.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waldenrique/simbrief-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/waldenrique/simbrief-dashboard/issues"
+  },
+  "homepage": "https://github.com/waldenrique/simbrief-dashboard#readme"
 }
