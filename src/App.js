@@ -6,10 +6,10 @@ import Voos from './pages/Voos';
 import Simbrief from './pages/Simbrief';
 import FlightMap from './pages/FlightMap';
 import LiveFlight from './pages/LiveFlight';
-import AtcOnline from './pages/AtcOnline'; // Não esquece de importar isso!
+import AtcOnline from './pages/ATCOnline'; // Corrigido aqui
 
 const App = () => (
-  <Router basename={process.env.PUBLIC_URL || '/'}>
+  <Router basename="/">
     <MainLayout>
       <Routes>
         <Route path="/" element={<Dashboard />} />
