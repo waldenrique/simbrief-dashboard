@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>Teste FSUIPC WebSocket</title></head>
+<body>
+  <h1>Teste FSUIPC</h1>
+  <pre id="log">Conectando...</pre>
+  <script>
+    const log = document.getElementById('log');
+    const socket = new WebSocket("ws://localhost:2048/fsuipc/");
+
+    socket.onopen = () => {
+      log.textContent += "\n✅ Conectado!";
+      socket.send(JSON.stringify({
+        command: "subscribe",
+        arguments: ["A:PLANE ALTITUDE"]
+      }));
+    };
+
+    socket.onmessage = (event) => {
+      log.textContent += "\n📡 " + event.data;
+    };
+
+    socket.onerror = (err) => {
+      log.textContent += "\n❌ Erro: " + err.message;
+    };
+
+    socket.onclose = () => {
+      log.textContent += "\n🔴 Conexão encerrada";
+    };
+  </script>
+</body>
+</html>
