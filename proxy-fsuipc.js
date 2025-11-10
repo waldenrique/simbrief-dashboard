@@ -23,10 +23,13 @@ let fsuipcConnection = null;
 let reconnectInterval = null;
 
 function connectToFSUIPC() {
-  console.log('[PROXY] Tentando conectar ao FSUIPC em ws://localhost:2048/fsuipc/...');
+  console.log('[PROXY] Tentando conectar ao FSUIPC em wss://localhost:2048/fsuipc/...');
   
   try {
-    fsuipcConnection = new WebSocket('ws://localhost:2048/fsuipc/');
+    // Usar WSS (WebSocket Seguro) com certificados auto-assinados permitidos
+    fsuipcConnection = new WebSocket('wss://localhost:2048/fsuipc/', {
+      rejectUnauthorized: false  // Permitir certificados auto-assinados
+    });
     
     fsuipcConnection.on('open', () => {
       console.log('[PROXY] ✅ Conectado ao FSUIPC!');

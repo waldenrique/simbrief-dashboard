@@ -13,10 +13,13 @@ export function useFSUIPC() {
 
     const connectToFSUIPC = () => {
       try {
-        console.log('[FSUIPC] Tentando conectar a ws://localhost:2048/fsuipc/...');
+        // Usar WSS (seguro) para conectar ao FSUIPC com SSL ativado
+        const wsUrl = 'wss://localhost:2048/fsuipc/';
+        console.log('[FSUIPC] Tentando conectar a', wsUrl, '...');
         setStatus('conectando');
         
-        socket = new WebSocket('ws://localhost:2048/fsuipc/');
+        // Para certificados auto-assinados (FSUIPC), permitir conexão insegura
+        socket = new WebSocket(wsUrl);
 
         socket.onopen = () => {
           console.log('[FSUIPC] ✅ Conectado com sucesso!');

@@ -15,10 +15,10 @@ const AtcOnline = () => {
 
     const connectToFSUIPC = () => {
       try {
-        console.log('[ATCOnline] Conectando a ws://localhost:2048/fsuipc/');
+        console.log('[ATCOnline] Conectando a wss://localhost:2048/fsuipc/');
         setConnectionStatus('Conectando...');
         
-        socket = new WebSocket('ws://localhost:2048/fsuipc/');
+        socket = new WebSocket('wss://localhost:2048/fsuipc/');
 
         socket.onopen = () => {
           console.log('[ATCOnline] ✅ Conectado ao FSUIPC');
