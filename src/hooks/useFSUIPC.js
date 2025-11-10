@@ -4,41 +4,86 @@ import { useEffect, useState } from 'react';
 export function useFSUIPC() {
   const [data, setData] = useState(null);
   const [status, setStatus] = useState('desconectado');
+  const [error, setError] = useState(null);
+  const [connectionAttempts, setConnectionAttempts] = useState(0);
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:2048/fsuipc/');
+    let socket = null;
+    let reconnectTimeout = null;
 
-    socket.onopen = () => {
-      setStatus('conectado');
+    const connectToFSUIPC = () => {
+      try {
+        console.log('[FSUIPC] Tentando conectar a ws://localhost:2048/fsuipc/...');
+        setStatus('conectando');
+        
+        socket = new WebSocket('ws://localhost:2048/fsuipc/');
 
-      socket.send(JSON.stringify({
-        command: 'subscribe',
-        arguments: [
-          'A:PLANE LATITUDE',
-          'A:PLANE LONGITUDE',
-          'A:PLANE ALTITUDE',
-          'A:AIRSPEED INDICATED',
-          'A:HEADING INDICATOR'
-        ]
-      }));
-    };
+        socket.onopen = () => {
+          console.log('[FSUIPC] ✅ Conectado com sucesso!');
+          setStatus('conectado');
+          setError(null);
+          setConnectionAttempts(0);
 
-    socket.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
-      if (msg.data) {
-        const mapped = {};
-        msg.data.forEach(item => {
-          mapped[item.name] = item.value;
-        });
-        setData(mapped);
+          socket.send(JSON.stringify({
+            command: 'subscribe',
+            arguments: [
+              'A:PLANE LATITUDE',
+              'A:PLANE LONGITUDE',
+              'A:PLANE ALTITUDE',
+              'A:AIRSPEED INDICATED',
+              'A:HEADING INDICATOR'
+            ]
+          }));
+        };
+
+        socket.onmessage = (event) => {
+          try {
+            const msg = JSON.parse(event.data);
+            if (msg.data) {
+              const mapped = {};
+              msg.data.forEach(item => {
+                mapped[item.name] = item.value;
+              });
+              setData(mapped);
+            }
+          } catch (e) {
+            console.error('[FSUIPC] Erro ao parsear mensagem:', e);
+          }
+        };
+
+        socket.onclose = () => {
+          console.log('[FSUIPC] Conexão fechada');
+          setStatus('desconectado');
+          setData(null);
+          
+          // Tentar reconectar após 5 segundos
+          console.log('[FSUIPC] Tentando reconectar em 5 segundos...');
+          reconnectTimeout = setTimeout(() => {
+            setConnectionAttempts(prev => prev + 1);
+            connectToFSUIPC();
+          }, 5000);
+        };
+
+        socket.onerror = (error) => {
+          console.error('[FSUIPC] Erro WebSocket:', error);
+          setStatus('erro');
+          setError('Não foi possível conectar ao FSUIPC. Verifique se Flight Simulator está rodando.');
+        };
+
+      } catch (error) {
+        console.error('[FSUIPC] Erro ao criar WebSocket:', error);
+        setStatus('erro');
+        setError(error.message);
       }
     };
 
-    socket.onclose = () => setStatus('desconectado');
-    socket.onerror = () => setStatus('erro');
+    connectToFSUIPC();
 
-    return () => socket.close();
+    return () => {
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      if (socket) socket.close();
+    };
   }, []);
 
-  return { data, status };
+  return { data, status, error, connectionAttempts };
 }

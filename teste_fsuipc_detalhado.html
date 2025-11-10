@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste FSUIPC WebSocket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border-left: 4px solid #007bff;
+        }
+        #log {
+            height: 300px;
+            overflow-y: auto;
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            border: 2px solid #007bff;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-connect {
+            background: #28a745;
+            color: white;
+        }
+        .btn-disconnect {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-test {
+            background: #007bff;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Teste de Conexão FSUIPC WebSocket</h1>
+        
+        <div id="statusContainer">
+            <div class="status pending" id="connectionStatus">
+                ⏳ Aguardando conexão...
+            </div>
+        </div>
+
+        <h2>Informações da Conexão</h2>
+        <pre id="info">
+URL: ws://localhost:2048/fsuipc/
+Estado: Desconectado
+Mensagens: 0
+Erros: 0
+        </pre>
+
+        <h2>Controles</h2>
+        <button class="btn-connect" onclick="connect()">🔌 Conectar</button>
+        <button class="btn-test" onclick="testSubscribe()">📡 Testar Subscrição</button>
+        <button class="btn-test" onclick="testOffsets()">📊 Testar Offsets</button>
+        <button class="btn-disconnect" onclick="disconnect()">🔴 Desconectar</button>
+
+        <h2>Log de Eventos</h2>
+        <div id="log"></div>
+
+        <h2>Detalhes Técnicos</h2>
+        <pre id="details">Processador: Node
+Porta: 2048
+Caminho: /fsuipc/
+Protocolo: WebSocket (ws)
+Status do Browser WebSocket: <span id="wsSupport">Verificando...</span>
+        </pre>
+    </div>
+
+    <script>
+        let socket = null;
+        let messageCount = 0;
+        let errorCount = 0;
+
+        const log = document.getElementById('log');
+        const statusDiv = document.getElementById('connectionStatus');
+        const wsSupport = document.getElementById('wsSupport');
+
+        // Verificar suporte a WebSocket
+        if (window.WebSocket) {
+            wsSupport.textContent = '✅ Suportado';
+        } else {
+            wsSupport.textContent = '❌ Não suportado';
+        }
+
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            
+            let icon = '📝';
+            let color = '#00ff00';
+            
+            if (type === 'error') {
+                icon = '❌';
+                color = '#ff0000';
+            } else if (type === 'success') {
+                icon = '✅';
+                color = '#00ff00';
+            } else if (type === 'warning') {
+                icon = '⚠️';
+                color = '#ffff00';
+            }
+            
+            logEntry.style.color = color;
+            logEntry.textContent = `[${timestamp}] ${icon} ${message}`;
+            log.appendChild(logEntry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function updateStatus(state, message) {
+            let className = 'pending';
+            let icon = '⏳';
+
+            if (state === 'connected') {
+                className = 'success';
+                icon = '✅';
+            } else if (state === 'error') {
+                className = 'error';
+                icon = '❌';
+            } else if (state === 'disconnected') {
+                className = 'info';
+                icon = '🔴';
+            }
+
+            statusDiv.className = `status ${className}`;
+            statusDiv.textContent = `${icon} ${message}`;
+
+            // Atualizar info
+            const info = document.getElementById('info');
+            const estado = socket ? (socket.readyState === 1 ? 'Conectado' : 'Desconectando') : 'Desconectado';
+            info.textContent = `URL: ws://localhost:2048/fsuipc/\nEstado: ${estado}\nMensagens: ${messageCount}\nErros: ${errorCount}`;
+        }
+
+        function connect() {
+            if (socket && socket.readyState === 1) {
+                addLog('Já está conectado!', 'warning');
+                return;
+            }
+
+            addLog('Tentando conectar a ws://localhost:2048/fsuipc/...', 'info');
+            updateStatus('pending', '⏳ Conectando...');
+
+            try {
+                socket = new WebSocket('ws://localhost:2048/fsuipc/');
+
+                socket.onopen = () => {
+                    addLog('✅ Conectado com sucesso!', 'success');
+                    updateStatus('connected', '✅ Conectado com sucesso!');
+                    addLog('Pronto para enviar comandos', 'success');
+                };
+
+                socket.onmessage = (event) => {
+                    messageCount++;
+                    try {
+                        const data = JSON.parse(event.data);
+                        addLog(`Mensagem recebida: ${JSON.stringify(data).substring(0, 100)}...`, 'success');
+                    } catch (e) {
+                        addLog(`Dados recebidos: ${event.data.substring(0, 100)}...`, 'info');
+                    }
+                };
+
+                socket.onerror = (error) => {
+                    errorCount++;
+                    addLog(`Erro WebSocket: ${error.message || 'Erro desconhecido'}`, 'error');
+                    updateStatus('error', '❌ Erro de conexão');
+                };
+
+                socket.onclose = () => {
+                    addLog('Conexão fechada', 'warning');
+                    updateStatus('disconnected', '🔴 Desconectado');
+                };
+
+            } catch (error) {
+                addLog(`Erro ao criar WebSocket: ${error.message}`, 'error');
+                updateStatus('error', `❌ ${error.message}`);
+            }
+        }
+
+        function disconnect() {
+            if (socket) {
+                addLog('Desconectando...', 'info');
+                socket.close();
+                socket = null;
+            } else {
+                addLog('Nenhuma conexão ativa', 'warning');
+            }
+        }
+
+        function testSubscribe() {
+            if (!socket || socket.readyState !== 1) {
+                addLog('❌ Não está conectado!', 'error');
+                return;
+            }
+
+            const command = {
+                command: 'subscribe',
+                arguments: [
+                    'A:PLANE LATITUDE',
+                    'A:PLANE LONGITUDE',
+                    'A:PLANE ALTITUDE',
+                    'A:AIRSPEED INDICATED',
+                    'A:HEADING INDICATOR'
+                ]
+            };
+
+            addLog(`Enviando subscrição: ${JSON.stringify(command)}`, 'info');
+            socket.send(JSON.stringify(command));
+        }
+
+        function testOffsets() {
+            if (!socket || socket.readyState !== 1) {
+                addLog('❌ Não está conectado!', 'error');
+                return;
+            }
+
+            const command = {
+                command: 'offsets.declare',
+                name: 'testData',
+                offsets: [
+                    { name: 'altitude', address: 0x0570, type: 'long', size: 8 }
+                ]
+            };
+
+            addLog(`Enviando declaração de offsets: ${JSON.stringify(command)}`, 'info');
+            socket.send(JSON.stringify(command));
+        }
+
+        // Conectar automaticamente ao carregar
+        window.addEventListener('load', () => {
+            addLog('Página carregada', 'info');
+            addLog('Clique em "Conectar" para iniciar teste', 'info');
+        });
+    </script>
+</body>
+</html>
