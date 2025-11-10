@@ -32,7 +32,7 @@ export const ConnectionStatus = ({ status, error, connectionAttempts }) => {
   const getStatusMessage = () => {
     switch (status) {
       case 'conectado':
-        return 'Conectado ao FSUIPC';
+        return 'Conectado ao FSUIPC (ws://localhost:2048/fsuipc/)';
       case 'conectando':
         return `Conectando ao FSUIPC... (Tentativa ${connectionAttempts + 1})`;
       case 'erro':
@@ -53,15 +53,23 @@ export const ConnectionStatus = ({ status, error, connectionAttempts }) => {
         <div className="mt-2 text-sm">
           <p className="font-mono">{error}</p>
           <p className="mt-1 text-xs">
-            💡 Dica: Certifique-se de que Flight Simulator está aberto e FSUIPC está rodando
+            💡 Dica: Certifique-se de que Flight Simulator está aberto e FSUIPC está rodando na porta 2048
           </p>
         </div>
       )}
       {status === 'conectando' && connectionAttempts > 0 && (
         <div className="mt-2 text-sm">
-          <p>Aguardando reconexão automática...</p>
+          <p>⏳ Aguardando reconexão automática...</p>
           <p className="text-xs mt-1">
-            Próxima tentativa em 5 segundos
+            Próxima tentativa em 5 segundos (Tentativa #{connectionAttempts + 1})
+          </p>
+        </div>
+      )}
+      {status === 'desconectado' && (
+        <div className="mt-2 text-sm">
+          <p>Servidor FSUIPC não está respondendo</p>
+          <p className="text-xs mt-1">
+            Certifique-se de que Flight Simulator 2024 está aberto e FSUIPC está rodando
           </p>
         </div>
       )}

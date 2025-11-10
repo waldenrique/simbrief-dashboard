@@ -24,27 +24,46 @@ export function useFSUIPC() {
           setError(null);
           setConnectionAttempts(0);
 
+          // Declarar variáveis FSUIPC
           socket.send(JSON.stringify({
-            command: 'subscribe',
-            arguments: [
-              'A:PLANE LATITUDE',
-              'A:PLANE LONGITUDE',
-              'A:PLANE ALTITUDE',
-              'A:AIRSPEED INDICATED',
-              'A:HEADING INDICATOR'
+            command: 'vars.declare',
+            definitions: [
+              { name: 'latitude', type: 'f64', varname: 'PLANE LATITUDE' },
+              { name: 'longitude', type: 'f64', varname: 'PLANE LONGITUDE' },
+              { name: 'altitude', type: 'f64', varname: 'PLANE ALTITUDE' },
+              { name: 'speed', type: 'i32', varname: 'AIRSPEED INDICATED' },
+              { name: 'heading', type: 'i32', varname: 'HEADING INDICATOR' }
             ]
           }));
+
+          // Iniciar leitura contínua
+          setTimeout(() => {
+            socket.send(JSON.stringify({
+              command: 'vars.read'
+            }));
+          }, 100);
         };
 
         socket.onmessage = (event) => {
           try {
             const msg = JSON.parse(event.data);
-            if (msg.data) {
+            
+            // Resposta de vars.read
+            if (msg.data && Array.isArray(msg.data)) {
               const mapped = {};
               msg.data.forEach(item => {
                 mapped[item.name] = item.value;
               });
               setData(mapped);
+              
+              // Continuar lendo
+              socket.send(JSON.stringify({
+                command: 'vars.read'
+              }));
+            }
+            // Resposta de vars.declare
+            else if (msg.command === 'vars.declare') {
+              console.log('[FSUIPC] Variáveis declaradas com sucesso');
             }
           } catch (e) {
             console.error('[FSUIPC] Erro ao parsear mensagem:', e);
