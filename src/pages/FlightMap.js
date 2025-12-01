@@ -21,14 +21,14 @@ const FlightMap = () => {
       if (!flight?.navlog?.fix) return;
 
       const route = flight.navlog.fix
-      .map((fix) => {
-        const lat = parseFloat(fix.pos_lat?.[0]);
-        const lon = parseFloat(fix.pos_long?.[0]);
-        if (!isNaN(lat) && !isNaN(lon)) return [lat, lon];
-        return null;
-      })
-      .filter(Boolean);
-    
+        .map((fix) => {
+          const lat = parseFloat(fix.pos_lat?.[0]);
+          const lon = parseFloat(fix.pos_long?.[0]);
+          if (!isNaN(lat) && !isNaN(lon)) return [lat, lon];
+          return null;
+        })
+        .filter(Boolean);
+
 
       setCoords(route);
       setPlanePos(route[0]);
@@ -56,24 +56,43 @@ const FlightMap = () => {
   }, [coords]);
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">🗺️ Mapa Interativo com Animação</h2>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
+          <span className="text-3xl">🗺️</span> Mapa Interativo com Animação
+        </h2>
+        {coords.length > 0 && (
+          <div className="text-sm text-slate-400 font-mono">
+            Progresso: {step}/{coords.length} waypoints
+          </div>
+        )}
+      </div>
 
       {coords.length > 0 ? (
-        <MapContainer
-          center={coords[0]}
-          zoom={6}
-          scrollWheelZoom={true}
-          style={{ height: '600px', width: '100%' }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <Polyline positions={coords} color="blue" />
-          {planePos && <Marker position={planePos} icon={airplaneIcon} />}
-        </MapContainer>
+        <div className="glass-card p-0 overflow-hidden">
+          <div className="h-[600px] w-full relative z-0">
+            <MapContainer
+              center={coords[0]}
+              zoom={6}
+              scrollWheelZoom={true}
+              style={{ height: '100%', width: '100%' }}
+            >
+              <TileLayer
+                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              />
+              <Polyline positions={coords} color="#0ea5e9" weight={3} opacity={0.8} />
+              {planePos && <Marker position={planePos} icon={airplaneIcon} />}
+            </MapContainer>
+          </div>
+        </div>
       ) : (
-        <p className="text-gray-600">Nenhum plano de voo disponível ou rota vazia.</p>
+        <div className="flex flex-col items-center justify-center h-96 glass-panel rounded-xl">
+          <div className="text-slate-500 text-center">
+            <p className="text-lg mb-2">Nenhum plano de voo disponível</p>
+            <p className="text-sm">Configure um ID SimBrief válido na barra lateral</p>
+          </div>
+        </div>
       )}
     </div>
   );

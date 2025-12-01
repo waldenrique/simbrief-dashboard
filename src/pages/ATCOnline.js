@@ -17,7 +17,7 @@ const AtcOnline = () => {
       try {
         console.log('[ATCOnline] Conectando a wss://localhost:2048/fsuipc/');
         setConnectionStatus('Conectando...');
-        
+
         socket = new WebSocket('wss://localhost:2048/fsuipc/');
 
         socket.onopen = () => {
@@ -88,7 +88,7 @@ const AtcOnline = () => {
         socket.onclose = () => {
           console.log('[ATCOnline] Desconectado do FSUIPC');
           setConnectionStatus('Desconectado ❌');
-          
+
           // Reconectar após 5 segundos
           reconnectTimeout = setTimeout(() => {
             setRetryCount(prev => prev + 1);
@@ -116,31 +116,46 @@ const AtcOnline = () => {
   }, []);
 
   return (
-    <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="md:col-span-2">
-        <h1 className="text-2xl font-bold mb-4">🛩️ ATC Online - Rede 3D Rocket (Beta)</h1>
 
-        <Card className="p-4 mb-4">
-          <p>Status da conexão: <strong>{connectionStatus}</strong></p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="md:col-span-2 space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
+            <span className="text-3xl">🛩️</span> ATC Online <span className="text-xs bg-aviation-500/20 text-aviation-300 px-2 py-1 rounded-full border border-aviation-500/30">BETA</span>
+          </h1>
+          <div className={`px-4 py-2 rounded-lg font-mono text-sm font-bold flex items-center gap-2 ${connectionStatus.includes('Conectado ✅')
+            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+            : 'bg-red-500/20 text-red-400 border border-red-500/30'
+            }`}>
+            <div className={`w-2 h-2 rounded-full ${connectionStatus.includes('Conectado ✅') ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></div>
+            {connectionStatus}
+          </div>
+        </div>
+
+        <Card className="p-0 overflow-hidden border-0">
+          <div className="p-4 border-b border-slate-800/50 bg-slate-900/30 flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-slate-100">🌍 Mapa de Tráfego</h2>
+            <span className="text-xs text-slate-400">Live Data</span>
+          </div>
+          <div className="h-[500px] w-full relative z-0">
+            <MapContainer center={[0, 0]} zoom={2} style={{ height: '100%', width: '100%' }}>
+              <TileLayer
+                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              />
+              {/* Marcadores removidos temporariamente */}
+            </MapContainer>
+          </div>
         </Card>
 
-        <Card className="p-4 mb-6">
-          <h2 className="text-xl font-semibold mb-2">🌍 Mapa de Tráfego</h2>
-          <MapContainer center={[0, 0]} zoom={2} style={{ height: '500px', width: '100%' }}>
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; OpenStreetMap contributors'
-            />
-            {/* Marcadores removidos temporariamente */}
-          </MapContainer>
-        </Card>
-
-        <Card className="p-4">
-          <h2 className="text-xl font-semibold mb-2">📡 Mensagens Recebidas</h2>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
-            {messages.length === 0 && <p>Nenhuma mensagem ainda.</p>}
+        <Card>
+          <h2 className="text-lg font-semibold mb-4 text-slate-100 flex items-center gap-2">
+            <span className="text-xl">📡</span> Mensagens Recebidas
+          </h2>
+          <div className="space-y-2 max-h-64 overflow-y-auto pr-2 scrollbar-thin">
+            {messages.length === 0 && <p className="text-slate-500 text-center py-8">Nenhuma mensagem recebida ainda.</p>}
             {messages.map((msg, index) => (
-              <div key={index} className="bg-gray-100 p-2 rounded">
+              <div key={index} className="bg-slate-900/50 p-3 rounded-lg border border-slate-800/50 font-mono text-xs text-slate-300 hover:bg-slate-800/50 transition-colors">
                 {msg}
               </div>
             ))}
@@ -149,20 +164,45 @@ const AtcOnline = () => {
       </div>
 
       <div className="md:col-span-1">
-        <Card className="p-4 sticky top-6">
-          <h2 className="text-xl font-semibold mb-2">📋 Dados do Voo</h2>
+        <Card className="sticky top-6">
+          <h2 className="text-lg font-semibold mb-4 text-slate-100 border-b border-slate-800/50 pb-2">
+            📋 Dados do Voo
+          </h2>
           {selectedPlane ? (
-            <ul className="space-y-1">
-              <li><strong>Callsign:</strong> {selectedPlane.callsign}</li>
-              <li><strong>Latitude:</strong> {selectedPlane.lat?.toFixed(6)}</li>
-              <li><strong>Longitude:</strong> {selectedPlane.lon?.toFixed(6)}</li>
-              <li><strong>Altitude:</strong> {selectedPlane.altitude} ft</li>
-              <li><strong>Velocidade:</strong> {selectedPlane.speed} kt</li>
-              <li><strong>Heading:</strong> {selectedPlane.heading}°</li>
-              <li><strong>Vertical Speed:</strong> {selectedPlane.verticalSpeed || 0} ft/min</li>
+            <ul className="space-y-3">
+              <li className="flex justify-between items-center">
+                <span className="text-slate-400 text-sm">Callsign</span>
+                <span className="font-mono font-bold text-aviation-400">{selectedPlane.callsign}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-slate-400 text-sm">Latitude</span>
+                <span className="font-mono text-slate-200">{selectedPlane.lat?.toFixed(6)}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-slate-400 text-sm">Longitude</span>
+                <span className="font-mono text-slate-200">{selectedPlane.lon?.toFixed(6)}</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-slate-400 text-sm">Altitude</span>
+                <span className="font-mono text-emerald-400">{selectedPlane.altitude} ft</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-slate-400 text-sm">Velocidade</span>
+                <span className="font-mono text-amber-400">{selectedPlane.speed} kt</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-slate-400 text-sm">Heading</span>
+                <span className="font-mono text-slate-200">{selectedPlane.heading}°</span>
+              </li>
+              <li className="flex justify-between items-center">
+                <span className="text-slate-400 text-sm">V. Speed</span>
+                <span className="font-mono text-slate-200">{selectedPlane.verticalSpeed || 0} ft/min</span>
+              </li>
             </ul>
           ) : (
-            <p>Nenhum avião selecionado.</p>
+            <div className="text-center py-8 text-slate-500">
+              <p>Nenhum avião selecionado.</p>
+            </div>
           )}
         </Card>
       </div>

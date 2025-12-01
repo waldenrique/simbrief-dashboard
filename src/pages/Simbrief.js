@@ -4,12 +4,14 @@ import { FaPlane, FaPlaneDeparture, FaPlaneArrival, FaGasPump, FaUserFriends, Fa
 import { useSimbrief } from '../context/SimbriefContext';
 
 const Card = ({ title, icon, children }) => (
-  <div className="bg-white shadow rounded-lg p-6">
-    <div className="flex items-center mb-4 text-indigo-600">
-      <div className="text-2xl mr-2">{icon}</div>
-      <h3 className="text-lg font-bold">{title}</h3>
+  <div className="glass-card p-6 hover:translate-y-[-2px] transition-transform duration-300">
+    <div className="flex items-center mb-4 text-aviation-400">
+      <div className="text-2xl mr-3 p-2 bg-aviation-500/10 rounded-lg">{icon}</div>
+      <h3 className="text-lg font-bold text-slate-100">{title}</h3>
     </div>
-    {children}
+    <div className="space-y-2 text-slate-300">
+      {children}
+    </div>
   </div>
 );
 
@@ -23,7 +25,7 @@ const Simbrief = () => {
       if (data) setFlight(data);
     });
   }, [userId]);
-  
+
   if (!flight) return <p className="p-6">Carregando plano de voo...</p>;
 
   const {
