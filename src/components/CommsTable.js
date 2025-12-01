@@ -119,8 +119,8 @@ const CommsTable = ({ simbriefData }) => {
             <button
               onClick={() => setLanguage('pt')}
               className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${language === 'pt'
-                  ? 'bg-aviation-600 text-white shadow-lg shadow-aviation-600/20'
-                  : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                ? 'bg-aviation-600 text-white shadow-lg shadow-aviation-600/20'
+                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                 }`}
             >
               <span>🇧🇷 Português</span>
@@ -129,8 +129,8 @@ const CommsTable = ({ simbriefData }) => {
             <button
               onClick={() => setLanguage('en')}
               className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${language === 'en'
-                  ? 'bg-aviation-600 text-white shadow-lg shadow-aviation-600/20'
-                  : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                ? 'bg-aviation-600 text-white shadow-lg shadow-aviation-600/20'
+                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                 }`}
             >
               <span>🇬🇧 English</span>
@@ -240,38 +240,59 @@ const CommsTable = ({ simbriefData }) => {
       {/* Accordions das frases */}
       <div className="space-y-4">
         <h3 className="text-xl font-bold text-slate-100 mb-4">Fraseologia</h3>
-        {phrasesData.map((section, idx) => (
-          <div key={idx} className="glass-card overflow-hidden border border-slate-700/50">
-            <button
-              onClick={() => setActiveItem(activeItem === idx ? null : idx)}
-              className={`w-full text-left p-4 font-semibold flex justify-between items-center transition-colors ${activeItem === idx ? 'bg-aviation-600/20 text-aviation-400' : 'text-slate-300 hover:bg-slate-800/50'
-                }`}
-            >
-              <span>{section.phase}</span>
-              {activeItem === idx ? <FaChevronUp /> : <FaChevronDown />}
-            </button>
-            {activeItem === idx && (
-              <div className="p-4 space-y-3 bg-slate-900/30">
-                {section[language].map((line, i) => (
-                  <div key={i} className="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
-                    {line.piloto && (
-                      <p className="mb-2 text-slate-300">
-                        <strong className="text-aviation-400 mr-2">👨‍✈️ Piloto:</strong>
-                        <span className="font-mono">{replaceVars(line.piloto)}</span>
-                      </p>
-                    )}
-                    {line.atc && (
-                      <p className="text-slate-300">
-                        <strong className="text-emerald-400 mr-2">📡 ATC:</strong>
-                        <span className="font-mono">{replaceVars(line.atc)}</span>
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+        {phrasesData
+          .filter((section) => {
+            const required = section.requiredServices;
+            if (!required) return true;
+
+            if (required.origin) {
+              const hasOriginService = required.origin.some(service =>
+                values.originAtcServices.includes(service)
+              );
+              if (hasOriginService) return true;
+            }
+
+            if (required.destination) {
+              const hasDestinationService = required.destination.some(service =>
+                values.destinationAtcServices.includes(service)
+              );
+              if (hasDestinationService) return true;
+            }
+
+            return false;
+          })
+          .map((section, idx) => (
+            <div key={idx} className="glass-card overflow-hidden border border-slate-700/50">
+              <button
+                onClick={() => setActiveItem(activeItem === idx ? null : idx)}
+                className={`w-full text-left p-4 font-semibold flex justify-between items-center transition-colors ${activeItem === idx ? 'bg-aviation-600/20 text-aviation-400' : 'text-slate-300 hover:bg-slate-800/50'
+                  }`}
+              >
+                <span>{section.phase}</span>
+                {activeItem === idx ? <FaChevronUp /> : <FaChevronDown />}
+              </button>
+              {activeItem === idx && (
+                <div className="p-4 space-y-3 bg-slate-900/30">
+                  {section[language].map((line, i) => (
+                    <div key={i} className="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
+                      {line.piloto && (
+                        <p className="mb-2 text-slate-300">
+                          <strong className="text-aviation-400 mr-2">👨‍✈️ Piloto:</strong>
+                          <span className="font-mono">{replaceVars(line.piloto)}</span>
+                        </p>
+                      )}
+                      {line.atc && (
+                        <p className="text-slate-300">
+                          <strong className="text-emerald-400 mr-2">📡 ATC:</strong>
+                          <span className="font-mono">{replaceVars(line.atc)}</span>
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
       </div>
     </div>
   );

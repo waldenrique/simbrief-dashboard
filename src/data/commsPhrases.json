@@ -1,6 +1,11 @@
 [
   {
     "phase": "Aprovação do Plano de Voo",
+    "requiredServices": {
+      "origin": [
+        "Tráfego"
+      ]
+    },
     "pt": [
       {
         "piloto": "{{origin_service}} {{origin_city}}, bom dia, {{callsign}}, na posição {{gate}}, solicita plano de voo instrumentos para {{destination_city}} no nível {{cruise}}, ciente da informação {{atis}}, pronto para cópia.",
@@ -24,6 +29,11 @@
   },
   {
     "phase": "Pushback e Acionamento",
+    "requiredServices": {
+      "origin": [
+        "Solo"
+      ]
+    },
     "pt": [
       {
         "piloto": "{{callsign}}, pronto para pushback e acionamento.",
@@ -39,6 +49,11 @@
   },
   {
     "phase": "Táxi Origem",
+    "requiredServices": {
+      "origin": [
+        "Solo"
+      ]
+    },
     "pt": [
       {
         "piloto": "{{callsign}}, pronto para taxi.",
@@ -54,6 +69,11 @@
   },
   {
     "phase": "Decolagem",
+    "requiredServices": {
+      "origin": [
+        "Torre"
+      ]
+    },
     "pt": [
       {
         "piloto": "{{callsign}}, pronto no ponto de espera da {{runway}}.",
@@ -69,6 +89,12 @@
   },
   {
     "phase": "Subida e Contato Radar",
+    "requiredServices": {
+      "origin": [
+        "Aproximação",
+        "Centro"
+      ]
+    },
     "pt": [
       {
         "piloto": "{{callsign}}, no ar, subindo para FL100 via SID {{sid}}.",
@@ -92,6 +118,12 @@
   },
   {
     "phase": "Descida e Aproximação",
+    "requiredServices": {
+      "destination": [
+        "Aproximação",
+        "Centro"
+      ]
+    },
     "pt": [
       {
         "piloto": "{{callsign}}, com o senhor, descendo FL250, boa tarde.",
@@ -121,6 +153,11 @@
   },
   {
     "phase": "Pouso",
+    "requiredServices": {
+      "destination": [
+        "Torre"
+      ]
+    },
     "pt": [
       {
         "piloto": "{{callsign}}, na final pista {{runway_d}}, trem baixado e travado.",
@@ -148,6 +185,11 @@
   },
   {
     "phase": "Táxi-In e Estacionamento",
+    "requiredServices": {
+      "destination": [
+        "Solo"
+      ]
+    },
     "pt": [
       {
         "atc": "{{callsign}}, prossiga o taxi via {{taxi_in}} posição {{gate_d}}, mantenha na escuta da TWR até o corte dos motores.",
