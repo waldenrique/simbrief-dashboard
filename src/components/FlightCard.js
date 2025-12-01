@@ -44,7 +44,7 @@ const FlightCard = ({ flight }) => {
           <InfoItem label="Aeronave" value={aeronave.icaocode} icon={FaPlane} />
           <InfoItem label="Cost Index" value={geral.costindex} icon={FaWind} />
           <InfoItem label="Cruzeiro" value={`FL${geral.initial_altitude}`} icon={FaMountain} />
-          <InfoItem label="Tempo Est." value={`${Math.floor(tempo.est_time_enroute / 60)}h ${tempo.est_time_enroute % 60}m`} icon={FaClock} />
+          <InfoItem label="Tempo Est." value={`${Math.floor(tempo.est_time_enroute / 100)}h ${tempo.est_time_enroute % 100}m`} icon={FaClock} />
           <div className="col-span-full">
             <InfoItem label="Rota" value={geral.route} icon={FaRoute} />
           </div>
