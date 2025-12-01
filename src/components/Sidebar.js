@@ -23,8 +23,8 @@ const Sidebar = () => {
       <Link
         to={to}
         className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 group ${isActive(to)
-            ? 'bg-aviation-600/20 text-aviation-400 border-r-2 border-aviation-500'
-            : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-100'
+          ? 'bg-aviation-600/20 text-aviation-400 border-r-2 border-aviation-500'
+          : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-100'
           }`}
       >
         <Icon className={`text-lg ${isActive(to) ? 'text-aviation-400' : 'text-slate-500 group-hover:text-slate-300'}`} />
@@ -74,11 +74,7 @@ const Sidebar = () => {
         <nav className="flex-1">
           <ul className="space-y-1">
             <NavItem to="/" icon={FaTachometerAlt} label="Dashboard" />
-            <NavItem to="/simbrief" icon={FaPlane} label="Plano de Voo" />
-            <NavItem to="/mapa" icon={FaMapMarkedAlt} label="Mapa em Tempo Real" />
             <NavItem to="/atc-online" icon={FaBroadcastTower} label="ATC Online" />
-            <NavItem to="/voo-ao-vivo" icon={FaSatelliteDish} label="Live Flight" />
-            <NavItem to="/voos" icon={FaHistory} label="Histórico" />
           </ul>
         </nav>
       </div>

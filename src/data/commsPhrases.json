@@ -4,16 +4,16 @@
     "pt": [
       {
         "piloto": "{{origin_service}} {{origin_city}}, bom dia, {{callsign}}, na posição {{gate}}, solicita plano de voo instrumentos para {{destination_city}} no nível {{cruise}}, ciente da informação {{atis}}, pronto para cópia.",
-        "atc": "{{callsign}}, autorizado IFR para {{destination_city}} no nível {{cruise}}, decola da pista {{runway}}, transição via {{sid}}, código transponder {{transponder}}, coteje."
+        "atc": "{{callsign}}, autorizado IFR para {{destination_city}} no nível {{cruise}}, decolagem pista {{runway}}, transição via {{sid}}, código transponder {{transponder}}, coteje."
       },
       {
-        "piloto": "Autorizado IFR para {{destination_city}}, nível {{cruise}}, decola da {{runway}}, transição {{sid}}, código transponder {{transponder}}, {{callsign}}.",
+        "piloto": "Autorizado IFR para {{destination_city}}, nível {{cruise}}, decolagem pista {{runway}}, transição {{sid}}, código transponder {{transponder}}, {{callsign}}.",
         "atc": "{{callsign}}, cotejamento correto. Para pushback e acionamento, coordene com a UNICOM 122.800. Bom voo!"
       }
     ],
     "en": [
       {
-        "piloto": "{{origin_service}} {{origin_city}} Delivery, good morning, {{callsign}}, at stand {{gate}}, requesting IFR clearance to {{destination_city}}, FL{{cruise}}, with {{atis}}, ready to copy.",
+        "piloto": "{{origin_service}} {{origin_city}} Delivery, good morning, {{callsign}}, at stand {{gate}}, requesting IFR clearance to {{destination_city}}, FL{{cruise}}, with information {{atis}}, ready to copy.",
         "atc": "{{callsign}}, cleared to {{destination_city}}, climb FL{{cruise}}, departure runway {{runway}}, via SID {{sid}}, squawk {{transponder}}. Read back."
       },
       {
@@ -57,13 +57,13 @@
     "pt": [
       {
         "piloto": "{{callsign}}, pronto no ponto de espera da {{runway}}.",
-        "atc": "{{callsign}}, autorizado decolagem pista {{runway}}, vento calmo, ajuste {{qnh}}."
+        "atc": "{{callsign}}, autorizado decolagem pista {{runway}}, vento calmo, QNH {{qnh}}."
       }
     ],
     "en": [
       {
         "piloto": "{{callsign}}, ready at holding point runway {{runway}}.",
-        "atc": "{{callsign}}, cleared for takeoff runway {{runway}}, wind calm, {{qnh}}."
+        "atc": "{{callsign}}, cleared for takeoff runway {{runway}}, wind calm, QNH {{qnh}}."
       }
     ]
   },
@@ -71,22 +71,22 @@
     "phase": "Subida e Contato Radar",
     "pt": [
       {
-        "piloto": "{{callsign}}, decolado, subindo para FL190 via SID {{sid}}.",
-        "atc": "{{callsign}}, radar contato, reporte ao atingir FL190."
+        "piloto": "{{callsign}}, no ar, subindo para FL100 via SID {{sid}}.",
+        "atc": "{{callsign}}, radar contato, reporte ao atingir FL100."
       },
       {
-        "piloto": "{{callsign}}, no nível de voo FL190.",
-        "atc": "Autorizado subida para {{cruise}}, reporte no ideal de descida."
+        "piloto": "{{callsign}}, nivelado FL100.",
+        "atc": "Autorizado subida para {{cruise}}, reporte iniciando descida."
       }
     ],
     "en": [
       {
-        "piloto": "{{callsign}}, airborne, climbing to FL190 via SID {{sid}}.",
-        "atc": "{{callsign}}, radar contact, report reaching FL190."
+        "piloto": "{{callsign}}, airborne, climbing to FL100 via SID {{sid}}.",
+        "atc": "{{callsign}}, radar contact, report reaching FL100."
       },
       {
-        "piloto": "{{callsign}}, level FL190.",
-        "atc": "Climb and maintain {{cruise}}, report at top of descent."
+        "piloto": "{{callsign}}, level FL100.",
+        "atc": "Climb and maintain {{cruise}}, report commencing descent."
       }
     ]
   },
@@ -94,12 +94,12 @@
     "phase": "Descida e Aproximação",
     "pt": [
       {
-        "piloto": "{{callsign}}, com o senhor, boa tarde.",
+        "piloto": "{{callsign}}, com o senhor, descendo FL250, boa tarde.",
         "atc": "{{callsign}}, boa tarde, continue descida para FL070."
       },
       {
         "piloto": "{{callsign}}, descendo para FL070.",
-        "atc": "Autorizado {{procedimento}} pista {{runway_d}}, reporte estabilizado."
+        "atc": "Autorizado aproximação {{procedimento}} pista {{runway_d}}, reporte estabilizado."
       },
       {
         "piloto": "Estabilizado no {{procedimento}} pista {{runway_d}}, {{callsign}}."
@@ -107,15 +107,15 @@
     ],
     "en": [
       {
-        "piloto": "{{callsign}}, with you, good afternoon.",
+        "piloto": "{{callsign}}, with you, descending FL250, good afternoon.",
         "atc": "{{callsign}}, good afternoon, descend and maintain FL070."
       },
       {
         "piloto": "Descending to FL070, {{callsign}}.",
-        "atc": "Cleared for {{procedimento}} approach runway  {{runway_d}}, report established."
+        "atc": "Cleared {{procedimento}} approach runway {{runway_d}}, report established."
       },
       {
-        "piloto": "Established on {{procedimento}} runway  {{runway_d}}, {{callsign}}."
+        "piloto": "Established on {{procedimento}} runway {{runway_d}}, {{callsign}}."
       }
     ]
   },
@@ -123,12 +123,11 @@
     "phase": "Pouso",
     "pt": [
       {
-        "piloto": "{{callsign}}, na final da  {{runway_d}}, trem baixado e travado.",
-        "atc": "Autorizado pouso pista {{runway_d}}, ajuste {{qnh}}, reporte livrando."
+        "piloto": "{{callsign}}, na final pista {{runway_d}}, trem baixado e travado.",
+        "atc": "Autorizado pouso pista {{runway_d}}, QNH {{qnh}}, reporte livrando."
       },
       {
-        "piloto": "Pouso autorizado pista {{runway_d}}, ajuste {{qnh}}, {{callsign}}.",
-        "atc": "Reporte livrando a pista."
+        "piloto": "Pouso autorizado pista {{runway_d}}, QNH {{qnh}}, {{callsign}}."
       },
       {
         "piloto": "{{callsign}}, pista livre."
@@ -137,11 +136,10 @@
     "en": [
       {
         "piloto": "{{callsign}}, final runway {{runway_d}}, gear down and locked.",
-        "atc": "Cleared to land runway {{runway_d}}, {{qnh}}, report runway vacated."
+        "atc": "Cleared to land runway {{runway_d}}, QNH {{qnh}}, report runway vacated."
       },
       {
-        "piloto": "Cleared to land runway {{runway_d}}, {{qnh}}, {{callsign}}.",
-        "atc": "Report vacated."
+        "piloto": "Cleared to land runway {{runway_d}}, QNH {{qnh}}, {{callsign}}."
       },
       {
         "piloto": "{{callsign}}, runway vacated."
@@ -153,7 +151,7 @@
     "pt": [
       {
         "atc": "{{callsign}}, prossiga o taxi via {{taxi_in}} posição {{gate_d}}, mantenha na escuta da TWR até o corte dos motores.",
-        "piloto": "Vai prosseguir com o taxi via {{taxi_in}} posição {{gate_d}}, vai manter na escuta da torre até o corte dos motores o {{callsign}}."
+        "piloto": "Prosseguindo taxi via {{taxi_in}} posição {{gate_d}}, mantendo escuta da torre até corte dos motores, {{callsign}}."
       },
       {
         "piloto": "{{callsign}}, informa corte dos motores na posição {{gate_d}}.",

@@ -116,16 +116,38 @@ const AtcOnline = () => {
   }, []);
 
   return (
-
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="md:col-span-3">
+        <div className="glass-card p-6 border-l-4 border-amber-500">
+          <div className="flex items-start gap-4">
+            <div className="text-4xl">🚧</div>
+            <div>
+              <h3 className="text-xl font-bold text-amber-400 mb-2">Funcionalidade em Desenvolvimento</h3>
+              <p className="text-slate-300 mb-2">
+                Esta página está sendo desenvolvida e em breve terá as seguintes funcionalidades:
+              </p>
+              <ul className="list-disc list-inside text-slate-400 space-y-1 ml-4">
+                <li>Integração com <strong className="text-aviation-400">NewSky</strong> para dados de voo em tempo real</li>
+                <li>Sistema de <strong className="text-aviation-400">ATC com IA</strong> para controle de tráfego aéreo</li>
+                <li>Mapa de tráfego ao vivo com aeronaves da rede</li>
+                <li>Comunicação automática entre piloto e ATC</li>
+              </ul>
+              <p className="text-slate-500 text-sm mt-3">
+                Aguarde as próximas atualizações! 🚀
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="md:col-span-2 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-3">
             <span className="text-3xl">🛩️</span> ATC Online <span className="text-xs bg-aviation-500/20 text-aviation-300 px-2 py-1 rounded-full border border-aviation-500/30">BETA</span>
           </h1>
           <div className={`px-4 py-2 rounded-lg font-mono text-sm font-bold flex items-center gap-2 ${connectionStatus.includes('Conectado ✅')
-            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-            : 'bg-red-500/20 text-red-400 border border-red-500/30'
+              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+              : 'bg-red-500/20 text-red-400 border border-red-500/30'
             }`}>
             <div className={`w-2 h-2 rounded-full ${connectionStatus.includes('Conectado ✅') ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></div>
             {connectionStatus}
